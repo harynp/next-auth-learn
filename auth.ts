@@ -38,21 +38,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
+      const isProtectedRoute = nextUrl.pathname.startsWith('/payment') || nextUrl.pathname.startsWith('/profile');
       if (isLoggedIn && nextUrl.pathname === '/auth/signin') {
         return NextResponse.redirect(new URL('/', nextUrl));
       }
 
-      // if (!isLoggedIn && nextUrl.pathname.startsWith('/payment')) {
-      //   return NextResponse.redirect(new URL('/auth/signin', nextUrl));
-      // }
-
-      if (!isLoggedIn && nextUrl.pathname.startsWith('/payment')) {
+      if (!isLoggedIn && isProtectedRoute) {
         const redirectUrl = nextUrl.pathname + nextUrl.search;
         const loginUrl = new URL('/auth/signin', nextUrl);
-        loginUrl.searchParams.set('redirect', redirectUrl); // Store the intended URL
-        return NextResponse.redirect(loginUrl); // Redirect to login with the redirect URL
+        loginUrl.searchParams.set('redirect', redirectUrl);
+        return NextResponse.redirect(loginUrl);
       }
-
 
       return true;
     },

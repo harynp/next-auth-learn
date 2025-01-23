@@ -27,6 +27,7 @@ export default function SignIn() {
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect") || "/";
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [globalError, setGlobalError] = useState<string>("");
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -38,15 +39,8 @@ export default function SignIn() {
 
   const onSubmit = async (values: z.infer<typeof signInSchema>) => {
     try {
-      const result = await handleCredentialSignIn({
-        email: values.email,
-        password: values.password,
-      });
-      if (result?.message) {
-        setGlobalError(result.message);
-      } else {
-        router.push(redirectUrl);
-      }
+      await handleCredentialSignIn(values);
+      router.push(redirectUrl);
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.", error);
     }
