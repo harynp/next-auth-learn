@@ -17,11 +17,7 @@ export async function handleCredentialSignIn({
       redirect: false,
     });
 
-    if (result?.error) {
-      throw new AuthError(result.error);
-    }
-
-    return null;
+    return result;
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

@@ -12,7 +12,7 @@ const PaymentPage = () => {
   return (
     <div>
       <h1>Payment Page</h1>
-      <p>Welcome, {session?.user?.name || "User"}</p>
+      <p>Token, {JSON.stringify(session)}</p>
     </div>
   );
 };
